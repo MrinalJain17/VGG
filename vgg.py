@@ -1,8 +1,8 @@
 from keras.models import Sequential
-from keras.layers import Dense, Flatten, Conv2D, MaxPool2D
+from keras.layers import Dense, Flatten, Dropout, Conv2D, MaxPool2D
 
 
-def VGG(model_type='D', input_shape=(224, 224, 3)):
+def VGG(model_type='D', dropout=0.5, num_classes=1000, input_shape=(224, 224, 3)):
     """Implements the VGG model.
     
     The function implements the following 5 versions of the VGG model:
@@ -15,6 +15,10 @@ def VGG(model_type='D', input_shape=(224, 224, 3)):
     Args:
         model_type (str): One of {'A', 'B', 'C', 'D', 'E'}. Defaults to 'D'.
             The type of model to implement.
+        dropout (float): Parameter to the dropout layer (after the first two FC layers each). Defaults to 0.5
+            If set to 'None', there will be no dropout layer.
+        num_classes (int): The number of output classes. Defaults to 1000 (as in Imagenet).
+            This will determine the number of neurons (units) in the last FC layer.
         input_shape (tuple): The shape of the input layer. Defaults to (224, 224, 3).
             The dimensions of the input tensor (of a single sample, i.e. do not include batch size).
             
@@ -38,6 +42,10 @@ def VGG(model_type='D', input_shape=(224, 224, 3)):
     
     assert (len(input_shape) == 3), "Invalid value of 'input_shape'\n" \
     "It should be of form (<image_height>, <image_width>, <channels>)"
+    
+    if(dropout != None):
+        assert ((type(dropout) == float) and (0 <= dropout <= 1)), "Invalid value of 'dropout'.\n" \
+        "It should be a real number between 0 and 1 (inclusive)."
 
     # Implementing the model
     model = Sequential()
@@ -47,14 +55,14 @@ def VGG(model_type='D', input_shape=(224, 224, 3)):
     if model_type in ['B', 'C', 'D']:
         model.add(Conv2D(filters=64, kernel_size=(3, 3), strides=(1, 1), padding='same', 
                          activation='relu', name='conv3-64'))
-    model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2), padding='valid', name='maxpool'))
+    model.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2), padding='valid', name='maxpool'))
 
     model.add(Conv2D(filters=128, kernel_size=(3, 3), strides=(1, 1), padding='same', 
                      activation='relu', name='conv3-128'))
     if model_type in ['B', 'C', 'D']:
         model.add(Conv2D(filters=128, kernel_size=(3, 3), strides=(1, 1), padding='same', 
                          activation='relu', name='conv3-128'))
-    model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2), padding='valid', name='maxpool'))
+    model.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2), padding='valid', name='maxpool'))
 
     model.add(Conv2D(filters=256, kernel_size=(3, 3), strides=(1, 1), padding='same', 
                      activation='relu', name='conv3-256'))
@@ -69,7 +77,7 @@ def VGG(model_type='D', input_shape=(224, 224, 3)):
     if model_type in ['E']:
         model.add(Conv2D(filters=256, kernel_size=(3, 3), strides=(1, 1), padding='same', 
                          activation='relu', name='conv3-256'))
-    model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2), padding='valid', name='maxpool'))
+    model.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2), padding='valid', name='maxpool'))
 
     model.add(Conv2D(filters=512, kernel_size=(3, 3), strides=(1, 1), padding='same', 
                      activation='relu', name='conv3-512'))
@@ -84,7 +92,7 @@ def VGG(model_type='D', input_shape=(224, 224, 3)):
     if model_type in ['E']:
         model.add(Conv2D(filters=512, kernel_size=(3, 3), strides=(1, 1), padding='same', 
                          activation='relu', name='conv3-512'))
-    model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2), padding='valid', name='maxpool'))
+    model.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2), padding='valid', name='maxpool'))
 
     model.add(Conv2D(filters=512, kernel_size=(3, 3), strides=(1, 1), padding='same', 
                      activation='relu', name='conv3-512'))
@@ -99,11 +107,15 @@ def VGG(model_type='D', input_shape=(224, 224, 3)):
     if model_type in ['E']:
         model.add(Conv2D(filters=512, kernel_size=(3, 3), strides=(1, 1), padding='same', 
                          activation='relu', name='conv3-512'))
-    model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2), padding='valid', name='maxpool'))
+    model.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2), padding='valid', name='maxpool'))
 
     model.add(Flatten(name='Flatten'))
     model.add(Dense(units=4096, activation='relu', name='FC-4096'))
+    if(dropout != None):
+        model.add(Dropout(dropout, name='Dropout'))
     model.add(Dense(units=4096, activation='relu', name='FC-4096'))
-    model.add(Dense(units=1000, activation='softmax', name='FC-1000'))
+    if(dropout != None):
+        model.add(Dropout(dropout, name='Dropout'))
+    model.add(Dense(units=num_classes, activation='softmax', name='FC-{}'.format(num_classes)))
 
     return model
