@@ -51,71 +51,71 @@ def VGG(model_type='D', dropout=0.5, num_classes=1000, input_shape=(224, 224, 3)
     model = Sequential()
 
     model.add(Conv2D(filters=64, kernel_size=(3, 3), strides=(1, 1), padding='same', 
-                     activation='relu', name='conv3-64', input_shape=input_shape))
+                     activation='relu', input_shape=input_shape))
     if model_type in ['B', 'C', 'D']:
         model.add(Conv2D(filters=64, kernel_size=(3, 3), strides=(1, 1), padding='same', 
-                         activation='relu', name='conv3-64'))
-    model.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2), padding='valid', name='maxpool'))
+                         activation='relu'))
+    model.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2), padding='valid'))
 
     model.add(Conv2D(filters=128, kernel_size=(3, 3), strides=(1, 1), padding='same', 
-                     activation='relu', name='conv3-128'))
+                     activation='relu'))
     if model_type in ['B', 'C', 'D']:
         model.add(Conv2D(filters=128, kernel_size=(3, 3), strides=(1, 1), padding='same', 
-                         activation='relu', name='conv3-128'))
-    model.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2), padding='valid', name='maxpool'))
+                         activation='relu'))
+    model.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2), padding='valid'))
 
     model.add(Conv2D(filters=256, kernel_size=(3, 3), strides=(1, 1), padding='same', 
-                     activation='relu', name='conv3-256'))
+                     activation='relu'))
     model.add(Conv2D(filters=256, kernel_size=(3, 3), strides=(1, 1), padding='same', 
-                     activation='relu', name='conv3-256'))
+                     activation='relu'))
     if model_type in ['C']:
         model.add(Conv2D(filters=256, kernel_size=(1, 1), strides=(1, 1), padding='same', 
-                         activation='relu', name='conv1-256'))
+                         activation='relu'))
     if model_type in ['D', 'E']:
         model.add(Conv2D(filters=256, kernel_size=(3, 3), strides=(1, 1), padding='same', 
-                         activation='relu', name='conv3-256'))
+                         activation='relu'))
     if model_type in ['E']:
         model.add(Conv2D(filters=256, kernel_size=(3, 3), strides=(1, 1), padding='same', 
-                         activation='relu', name='conv3-256'))
-    model.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2), padding='valid', name='maxpool'))
+                         activation='relu'))
+    model.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2), padding='valid'))
 
     model.add(Conv2D(filters=512, kernel_size=(3, 3), strides=(1, 1), padding='same', 
-                     activation='relu', name='conv3-512'))
+                     activation='relu'))
     model.add(Conv2D(filters=512, kernel_size=(3, 3), strides=(1, 1), padding='same', 
-                     activation='relu', name='conv3-512'))
+                     activation='relu'))
     if model_type in ['C']:
         model.add(Conv2D(filters=512, kernel_size=(1, 1), strides=(1, 1), padding='same', 
-                         activation='relu', name='conv1-512'))
+                         activation='relu'))
     if model_type in ['D', 'E']:
         model.add(Conv2D(filters=512, kernel_size=(3, 3), strides=(1, 1), padding='same', 
-                         activation='relu', name='conv3-512'))
+                         activation='relu'))
     if model_type in ['E']:
         model.add(Conv2D(filters=512, kernel_size=(3, 3), strides=(1, 1), padding='same', 
-                         activation='relu', name='conv3-512'))
-    model.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2), padding='valid', name='maxpool'))
+                         activation='relu'))
+    model.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2), padding='valid'))
 
     model.add(Conv2D(filters=512, kernel_size=(3, 3), strides=(1, 1), padding='same', 
-                     activation='relu', name='conv3-512'))
+                     activation='relu'))
     model.add(Conv2D(filters=512, kernel_size=(3, 3), strides=(1, 1), padding='same', 
-                     activation='relu', name='conv3-512'))
+                     activation='relu'))
     if model_type in ['C']:
         model.add(Conv2D(filters=512, kernel_size=(1, 1), strides=(1, 1), padding='same', 
-                         activation='relu', name='conv1-512'))
+                         activation='relu'))
     if model_type in ['D', 'E']:
         model.add(Conv2D(filters=512, kernel_size=(3, 3), strides=(1, 1), padding='same', 
-                         activation='relu', name='conv3-512'))
+                         activation='relu'))
     if model_type in ['E']:
         model.add(Conv2D(filters=512, kernel_size=(3, 3), strides=(1, 1), padding='same', 
-                         activation='relu', name='conv3-512'))
-    model.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2), padding='valid', name='maxpool'))
+                         activation='relu'))
+    model.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2), padding='valid'))
 
-    model.add(Flatten(name='Flatten'))
-    model.add(Dense(units=4096, activation='relu', name='FC-4096'))
+    model.add(Flatten())
+    model.add(Dense(units=4096, activation='relu'))
     if(dropout != None):
-        model.add(Dropout(dropout, name='Dropout'))
-    model.add(Dense(units=4096, activation='relu', name='FC-4096'))
+        model.add(Dropout(dropout))
+    model.add(Dense(units=4096, activation='relu'))
     if(dropout != None):
-        model.add(Dropout(dropout, name='Dropout'))
-    model.add(Dense(units=num_classes, activation='softmax', name='FC-{}'.format(num_classes)))
+        model.add(Dropout(dropout))
+    model.add(Dense(units=num_classes, activation='softmax'))
 
     return model
