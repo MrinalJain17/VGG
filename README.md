@@ -27,7 +27,7 @@ For further details, view the jupyter notebook by running the command:
 `Python 3.x` (preferably from the [Anaconda Distribution](https://www.anaconda.com/download/))
 
 ### Additional Libraries to install
-- [Keras]()  
+- [Keras](https://keras.io/)  
 ```bash
 	pip install keras
 ```
