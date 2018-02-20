@@ -52,14 +52,14 @@ def VGG(model_type='D', dropout=0.5, num_classes=1000, input_shape=(224, 224, 3)
 
     model.add(Conv2D(filters=64, kernel_size=(3, 3), strides=(1, 1), padding='same', 
                      activation='relu', input_shape=input_shape))
-    if model_type in ['B', 'C', 'D']:
+    if model_type in ['B', 'C', 'D', 'E']:
         model.add(Conv2D(filters=64, kernel_size=(3, 3), strides=(1, 1), padding='same', 
                          activation='relu'))
     model.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2), padding='valid'))
 
     model.add(Conv2D(filters=128, kernel_size=(3, 3), strides=(1, 1), padding='same', 
                      activation='relu'))
-    if model_type in ['B', 'C', 'D']:
+    if model_type in ['B', 'C', 'D', 'E']:
         model.add(Conv2D(filters=128, kernel_size=(3, 3), strides=(1, 1), padding='same', 
                          activation='relu'))
     model.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2), padding='valid'))
